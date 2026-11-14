@@ -1,0 +1,128 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Day studio: warm cream paper, terracotta, sage, mustard, soft charcoal */
+    --background: 39 52% 96%; /* #FAF6EF */
+    --foreground: 27 9% 23%; /* #3F3A35 soft charcoal */
+    --card: 43 100% 98%;
+    --card-foreground: 27 9% 23%;
+    --primary: 18 54% 54%; /* terracotta #C96F4A */
+    --primary-foreground: 39 52% 97%;
+    --secondary: 85 19% 52%; /* sage #8A9B6E */
+    --secondary-foreground: 39 52% 97%;
+    --accent: 39 67% 55%; /* mustard #D9A441 */
+    --accent-foreground: 27 9% 18%;
+    --muted: 40 35% 90%;
+    --muted-foreground: 27 8% 42%;
+    --destructive: 6 62% 45%;
+    --destructive-foreground: 39 52% 97%;
+    --border: 40 30% 85%;
+    --input: 40 30% 82%;
+    --ring: 18 54% 54%;
+    --radius: 1rem;
+  }
+
+  .dark {
+    /* Night studio: deep warm brown with lamp-glow accents */
+    --background: 24 20% 12%; /* deep warm brown */
+    --foreground: 38 35% 88%;
+    --card: 24 18% 16%;
+    --card-foreground: 38 35% 88%;
+    --primary: 18 60% 60%;
+    --primary-foreground: 24 20% 10%;
+    --secondary: 85 18% 48%;
+    --secondary-foreground: 24 20% 10%;
+    --accent: 39 72% 58%; /* lamp glow */
+    --accent-foreground: 24 20% 10%;
+    --muted: 24 14% 22%;
+    --muted-foreground: 38 18% 65%;
+    --destructive: 6 62% 55%;
+    --destructive-foreground: 24 20% 10%;
+    --border: 24 14% 26%;
+    --input: 24 14% 28%;
+    --ring: 39 72% 58%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    /* subtle paper / canvas grain */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.025 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background rounded-sm;
+  }
+}
+
+@layer components {
+  /* hand-drawn doodle underline for headings */
+  .doodle-underline {
+    position: relative;
+    display: inline-block;
+  }
+  .doodle-underline::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.35em;
+    height: 0.4em;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12' preserveAspectRatio='none'%3E%3Cpath d='M2 8 C 20 2, 40 10, 60 6 S 100 2, 118 7' fill='none' stroke='%23D9A441' stroke-width='3.5' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat;
+    background-size: 100% 100%;
+    opacity: 0.9;
+  }
+
+  /* brush-stroke divider */
+  .brush-divider {
+    height: 14px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 14' preserveAspectRatio='none'%3E%3Cpath d='M2 7 C 60 1, 120 13, 200 7 S 340 1, 398 8' fill='none' stroke='%23C96F4A' stroke-width='4' stroke-linecap='round' opacity='0.45'/%3E%3C/svg%3E") no-repeat center;
+    background-size: 100% 100%;
+  }
+
+  .card-lift {
+    @apply transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-lifted hover:rotate-[0.4deg];
+  }
+
+  .watermarked {
+    position: relative;
+    overflow: hidden;
+  }
+  .watermarked::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='180'%3E%3Ctext x='20' y='100' font-family='Georgia, serif' font-size='22' fill='rgba(63,58,53,0.14)' transform='rotate(-24 130 90)'%3EAmber Easel · preview%3C/text%3E%3C/svg%3E") repeat;
+  }
+  .dark .watermarked::after {
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='180'%3E%3Ctext x='20' y='100' font-family='Georgia, serif' font-size='22' fill='rgba(250,246,239,0.12)' transform='rotate(-24 130 90)'%3EAmber Easel · preview%3C/text%3E%3C/svg%3E") repeat;
+  }
+}
+
+/* soft custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
