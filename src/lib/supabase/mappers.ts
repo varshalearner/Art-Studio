@@ -157,6 +157,8 @@ export function mapMessage(row: any): ChatMessage {
     senderName: row.sender_name ?? "",
     text: row.text ?? "",
     imageUrl: row.image_url ?? undefined,
+    replyToId: row.reply_to ?? undefined,
+    reactions: row.reactions ?? {},
     createdAt: row.created_at,
   };
 }

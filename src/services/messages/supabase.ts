@@ -75,18 +75,24 @@ export async function send(input: {
   senderName: string;
   text: string;
   imageUrl?: string;
+  replyToId?: string;
 }): Promise<ChatMessage> {
-  const { data, error } = await getSupabase()
-    .from("messages")
-    .insert({
-      thread_id: input.threadId,
-      sender_id: input.senderId,
-      sender_name: input.senderName,
-      text: input.text,
-      image_url: input.imageUrl ?? null,
-    })
-    .select()
-    .single();
+  const row: Record<string, unknown> = {
+    thread_id: input.threadId,
+    sender_id: input.senderId,
+    sender_name: input.senderName,
+    text: input.text,
+    image_url: input.imageUrl ?? null,
+  };
+  const insert = (r: Record<string, unknown>) =>
+    getSupabase().from("messages").insert(r).select().single();
+  let { data, error } = input.replyToId
+    ? await insert({ ...row, reply_to: input.replyToId })
+    : await insert(row);
+  // Database not updated with the reply column yet: still deliver the message.
+  if (error && input.replyToId && isMissingSchema(error)) {
+    ({ data, error } = await insert(row));
+  }
   if (error) throw error;
 
   // The message is saved; thread preview + notifications must not delay or
@@ -133,12 +139,37 @@ export async function markThreadRead(threadId: string, userId: string): Promise<
     .eq("id", threadId);
 }
 
+/** PostgREST errors for a column / function that does not exist yet. */
+function isMissingSchema(error: { code?: string }): boolean {
+  return error.code === "PGRST204" || error.code === "PGRST202" || error.code === "42703";
+}
+
+/** Set (or with null, remove) the signed-in person's reaction on a message. */
+export async function react(
+  messageId: string,
+  _userId: string,
+  emoji: string | null
+): Promise<void> {
+  const { error } = await getSupabase().rpc("react_to_message", {
+    p_message_id: messageId,
+    p_emoji: emoji,
+  });
+  if (!error) return;
+  if (isMissingSchema(error)) {
+    throw new Error(
+      "Reactions need a one-time database update: run supabase/migrations/chat-reactions.sql in the Supabase SQL editor."
+    );
+  }
+  throw error;
+}
+
 export function subscribeMessages(cb: () => void): () => void {
   const channel = getSupabase()
     .channel("chat:messages")
     .on(
       "postgres_changes",
-      { event: "INSERT", schema: "public", table: "messages" },
+      // "*" so reactions (UPDATE) arrive live too
+      { event: "*", schema: "public", table: "messages" },
       () => cb()
     )
     .on(

@@ -10,5 +10,6 @@ export const getThread = impl.getThread;
 export const getOrCreateThread = impl.getOrCreateThread;
 export const listMessages = impl.listMessages;
 export const sendMessage = impl.send;
+export const reactToMessage = impl.react;
 export const markThreadRead = impl.markThreadRead;
 export const subscribeMessages = impl.subscribeMessages;

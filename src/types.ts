@@ -253,6 +253,10 @@ export interface ChatMessage {
   senderName: string;
   text: string;
   imageUrl?: string;
+  /** id of the message this one replies to */
+  replyToId?: string;
+  /** one reaction per person: userId -> emoji */
+  reactions?: Record<string, string>;
   createdAt: string;
 }
 

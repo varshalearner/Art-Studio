@@ -33,6 +33,34 @@ describe("messages", () => {
     expect(updated?.unreadBy).toEqual([DEMO_IDS.seller]);
   });
 
+  it("keeps the reply link and one reaction per person", async () => {
+    const thread = await newThread();
+    const first = await messages.send({
+      threadId: thread.id,
+      senderId: DEMO_IDS.buyer,
+      senderName: "Maya Kapoor",
+      text: "which size?",
+    });
+    const reply = await messages.send({
+      threadId: thread.id,
+      senderId: DEMO_IDS.seller,
+      senderName: "Arjun Mehta",
+      text: "A3",
+      replyToId: first.id,
+    });
+    expect(reply.replyToId).toBe(first.id);
+
+    await messages.react(first.id, DEMO_IDS.seller, "👍");
+    await messages.react(first.id, DEMO_IDS.seller, "❤️"); // replaces, not adds
+    await messages.react(first.id, DEMO_IDS.buyer, "😂");
+    let list = await messages.listMessages(thread.id);
+    expect(list[0].reactions).toEqual({ [DEMO_IDS.seller]: "❤️", [DEMO_IDS.buyer]: "😂" });
+
+    await messages.react(first.id, DEMO_IDS.seller, null);
+    list = await messages.listMessages(thread.id);
+    expect(list[0].reactions).toEqual({ [DEMO_IDS.buyer]: "😂" });
+  });
+
   it("an open chat that marks-read on every change does not loop", async () => {
     const thread = await newThread();
     let calls = 0;

@@ -65,6 +65,7 @@ export async function send(input: {
   senderName: string;
   text: string;
   imageUrl?: string;
+  replyToId?: string;
 }): Promise<ChatMessage> {
   if (!rateLimit(`msg_${input.senderId}`, 30, 60 * 1000)) {
     throw new Error("Slow down a little — too many messages in a minute.");
@@ -76,6 +77,8 @@ export async function send(input: {
     senderName: input.senderName,
     text: input.text,
     imageUrl: input.imageUrl,
+    replyToId: input.replyToId,
+    reactions: {},
     createdAt: nowIso(),
   };
   insert("messages", message);
@@ -110,6 +113,20 @@ export async function markThreadRead(threadId: string, userId: string): Promise<
     ...t,
     unreadBy: t.unreadBy.filter((id) => id !== userId),
   }));
+}
+
+/** Set (or with null, remove) this person's reaction on a message. */
+export async function react(
+  messageId: string,
+  userId: string,
+  emoji: string | null
+): Promise<void> {
+  updateById<ChatMessage>("messages", messageId, (m) => {
+    const reactions = { ...(m.reactions ?? {}) };
+    if (emoji) reactions[userId] = emoji;
+    else delete reactions[userId];
+    return { ...m, reactions };
+  });
 }
 
 export function subscribeMessages(cb: () => void): () => void {
