@@ -189,7 +189,7 @@ export function SellDashboard() {
       </div>
 
       <Tabs defaultValue={defaultTab}>
-        <TabsList>
+        <TabsList className="max-w-full">
           <TabsTrigger value="listings" data-testid="tab-listings">
             <ImagePlus className="mr-1 h-3.5 w-3.5" /> My Listings
           </TabsTrigger>

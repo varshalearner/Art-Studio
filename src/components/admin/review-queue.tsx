@@ -168,7 +168,7 @@ export function ReviewQueue() {
 
       {/* bulk bar */}
       {pending.length > 0 && (
-        <div className="mb-4 flex items-center justify-between rounded-lg border bg-card p-3 shadow-cozy">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-2 rounded-lg border bg-card p-3 shadow-cozy">
           <label className="flex items-center gap-2 text-sm">
             <input
               type="checkbox"
@@ -236,7 +236,7 @@ export function ReviewQueue() {
                         </p>
                       )}
                     </div>
-                    <div className="flex shrink-0 flex-row gap-2 sm:flex-col">
+                    <div className="flex w-full flex-wrap gap-2 sm:w-auto sm:shrink-0 sm:flex-col">
                       <Button size="sm" onClick={() => approve(l)} disabled={busy} data-testid={`approve-${l.slug}`}>
                         {busy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
                         Approve

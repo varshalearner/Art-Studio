@@ -204,7 +204,7 @@ export function CheckoutContent() {
   return (
     <div className="container max-w-4xl py-10">
       <h1 className="doodle-underline text-3xl font-bold">Checkout</h1>
-      <div className="mt-10 grid gap-8 md:grid-cols-[1fr_320px]">
+      <div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-[minmax(0,1fr)_320px]">
         <div className="space-y-6">
           {hasPhysical && (
             <Card>

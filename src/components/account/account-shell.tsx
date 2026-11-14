@@ -36,7 +36,7 @@ export function AccountShell({ children, title }: { children: ReactNode; title?:
 
   return (
     <div className="container py-10">
-      <div className="grid gap-8 md:grid-cols-[200px_1fr]">
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-[200px_minmax(0,1fr)]">
         <aside className="md:sticky md:top-24 md:self-start">
           <nav aria-label="Account" className="flex gap-1 overflow-x-auto md:flex-col">
             {LINKS.map((l) => {

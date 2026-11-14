@@ -96,11 +96,11 @@ export function Navbar() {
       </a>
       <div className="container flex h-16 items-center gap-3">
         {/* logo */}
-        <Link href="/" className="flex shrink-0 items-center gap-2" aria-label={siteConfig.name}>
-          <span className="rounded-full bg-primary/15 p-2">
+        <Link href="/" className="flex min-w-0 items-center gap-2 lg:shrink-0" aria-label={siteConfig.name}>
+          <span className="shrink-0 rounded-full bg-primary/15 p-2">
             <Palette className="h-5 w-5 text-primary" aria-hidden />
           </span>
-          <span className="font-display text-lg font-bold tracking-tight sm:text-xl">
+          <span className="truncate font-display text-base font-bold tracking-tight sm:text-xl">
             {siteConfig.name}
           </span>
         </Link>
@@ -136,7 +136,7 @@ export function Navbar() {
           </div>
         </form>
 
-        <div className="flex items-center gap-0.5">
+        <div className="ml-auto flex shrink-0 items-center gap-0.5 md:ml-0">
           {/* currency */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -180,6 +180,7 @@ export function Navbar() {
             variant="ghost"
             size="icon"
             aria-label="Toggle dark mode"
+            className="hidden sm:inline-flex"
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
           >
             <Sun className="h-4 w-4 dark:hidden" />
@@ -188,7 +189,7 @@ export function Navbar() {
 
           {/* messages */}
           {user && (
-            <Link href="/messages" aria-label={t("messages")} className="relative rounded-full p-2 hover:bg-muted">
+            <Link href="/messages" aria-label={t("messages")} className="relative hidden rounded-full p-2 hover:bg-muted sm:block">
               <MessageCircle className="h-4 w-4" />
               {unreadMessages > 0 && (
                 <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-terracotta text-[10px] font-bold text-white">
@@ -325,6 +326,22 @@ export function Navbar() {
                 </Link>
               </li>
             ))}
+            {user && (
+              <li className="sm:hidden">
+                <Link
+                  href="/messages"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center justify-between rounded-md px-3 py-2 font-medium hover:bg-muted"
+                >
+                  {t("messages")}
+                  {unreadMessages > 0 && (
+                    <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-terracotta px-1 text-[11px] font-bold text-white">
+                      {unreadMessages}
+                    </span>
+                  )}
+                </Link>
+              </li>
+            )}
             {!user && (
               <li>
                 <Link
@@ -337,6 +354,43 @@ export function Navbar() {
               </li>
             )}
           </ul>
+
+          {/* settings that don't fit in the top bar on phones */}
+          <div className="mt-3 flex flex-wrap items-center gap-2 border-t pt-3 sm:hidden">
+            <select
+              value={currency}
+              onChange={(e) => setCurrency(e.target.value as typeof currency)}
+              aria-label="Currency"
+              className="h-9 rounded-full border border-input bg-background px-3 text-sm"
+            >
+              {CURRENCIES.map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
+            <select
+              value={locale}
+              onChange={(e) => {
+                setLocaleCookie(e.target.value);
+                router.refresh();
+              }}
+              aria-label="Language"
+              className="h-9 rounded-full border border-input bg-background px-3 text-sm"
+            >
+              <option value="en">English</option>
+              <option value="hi">हिन्दी</option>
+            </select>
+            <Button
+              variant="outline"
+              size="sm"
+              className="ml-auto rounded-full"
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            >
+              <Sun className="h-4 w-4 dark:hidden" />
+              <Moon className="hidden h-4 w-4 dark:block" />
+              <span className="dark:hidden">Light</span>
+              <span className="hidden dark:inline">Dark</span>
+            </Button>
+          </div>
         </nav>
       )}
     </header>

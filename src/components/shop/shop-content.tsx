@@ -261,7 +261,7 @@ export function ShopContent() {
         </span>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-[230px_1fr]">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[230px_minmax(0,1fr)]">
         <aside className={`${showFilters ? "block" : "hidden"} rounded-lg border bg-card p-5 shadow-cozy lg:block lg:self-start lg:sticky lg:top-24`} aria-label={t("filters")}>
           {filterPanel}
         </aside>

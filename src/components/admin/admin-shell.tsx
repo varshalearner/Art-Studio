@@ -46,7 +46,7 @@ export function AdminShell({ children, title }: { children: ReactNode; title: st
 
   return (
     <div className="container py-10">
-      <div className="grid gap-8 lg:grid-cols-[210px_1fr]">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[210px_minmax(0,1fr)]">
         <aside className="lg:sticky lg:top-24 lg:self-start">
           <p className="mb-2 px-2 font-hand text-xl text-mustard-dark">Studio admin</p>
           <nav aria-label="Admin" className="flex gap-1 overflow-x-auto lg:flex-col">

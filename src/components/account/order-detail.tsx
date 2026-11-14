@@ -24,7 +24,7 @@ export function OrderDetail({ orderId }: { orderId: string }) {
       {isLoading ? null : !order ? (
         <EmptyState title="Order not found" />
       ) : (
-        <div className="grid gap-6 lg:grid-cols-[1fr_280px]">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_280px]">
           <div className="space-y-4">
             <Card>
               <CardHeader className="flex-row items-center justify-between space-y-0">

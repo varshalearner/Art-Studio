@@ -22,9 +22,14 @@ export const siteConfig = {
     "A cozy online art studio and marketplace — buy original art, sell your own, or commission a custom painting.",
 };
 
-/** Supabase live when both public keys are present. */
+/**
+ * Supabase live when both public keys are present.
+ * NEXT_PUBLIC_FORCE_DEMO=1 switches back to demo data without removing the
+ * keys (handy for trying things out or running the e2e tests locally).
+ */
 export const isSupabaseLive = Boolean(
-  process.env.NEXT_PUBLIC_SUPABASE_URL &&
+  process.env.NEXT_PUBLIC_FORCE_DEMO !== "1" &&
+    process.env.NEXT_PUBLIC_SUPABASE_URL &&
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 );
 
